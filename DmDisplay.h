@@ -26,6 +26,7 @@ class DmDisplay
 		void setWriteAddress(uint8_t columnAddr, uint8_t page);
 		void setCursor(uint8_t, uint8_t);
 		void clear();
+		void home();
 		enum
 		{
 			INSTRUCT,DATA

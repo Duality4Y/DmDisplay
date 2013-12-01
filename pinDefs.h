@@ -11,9 +11,8 @@
  * A0 is connected to: PD6
  * R/W is connected to: PD5
  * Enable is connected to: PD4
- * */
-
-/* Start of defines for easy line controle
+ *
+ * Start of defines for easy line controle
  * This wil spare me a lot of typing :)
  * Also this wil make it more portable between AVR's.
  * although if you want data to be on different ports,
@@ -52,8 +51,8 @@
 #define CLEAR_ENABLE			(FUNCTIONPORT &= ~(ENABLE))
 #define CLEAR_POWER				(FUNCTIONPORT &= ~(LCD_POWER))
 
-#define DATA_PORT 				PORTA
-#define DATA_DIR 				(DDRA)
+#define DATA_PORT 				PORTC
+#define DATA_DIR 				(DDRC)
 #define DATAPORT_TO_OUTPUT 		(DATA_DIR = 0xFF)
 #define DATAPORT_TO_INPUT		(DATA_DIR = 0x00)
 

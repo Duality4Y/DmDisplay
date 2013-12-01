@@ -1,5 +1,9 @@
 #include "DmDisplay.h"
 
+//sets up a few variables and ports
+//like setting data port to output.
+//and setting the control lines to output.
+//and call init to init the display.
 DmDisplay::DmDisplay()
 {
 	FUNCTIONPORT_TO_OUTPUT;
@@ -12,7 +16,7 @@ DmDisplay::DmDisplay()
 	init();
 	_delay_ms(100);
 }
-
+//initializes the display.
 void DmDisplay::init()
 {
 	write(0xE2, INSTRUCT);
@@ -27,9 +31,12 @@ void DmDisplay::init()
 	write(0xA4, INSTRUCT);
 	write(0xAF, INSTRUCT);
 	write(0x40, INSTRUCT);
+	clear();
 }
 
 //type = wheter it's instruction/command or data.
+//if DATA it's pixel data.
+//if INSTRUCT it's instruction data.
 void DmDisplay::write(uint8_t data, uint8_t type)
 {
 	DATA_PORT &= 0x00;
@@ -60,11 +67,12 @@ void DmDisplay::write(uint8_t data, uint8_t type)
 		SET_ENABLE;
 	}
 }
+//sets contrast of screen, with a value between 0-31
 void DmDisplay::setContrast(uint8_t contrast)
 {
 	write(0x80+contrast, INSTRUCT);
 }
-
+//allows to set the markers on the top of the screen.
 void DmDisplay::setMarker(uint8_t marker, bool state)
 {
 	uint8_t heighNibble, lowNibble;
@@ -103,12 +111,12 @@ void DmDisplay::setMarker(uint8_t marker, bool state)
 	
 	write((state?1:0), DATA);
 }
-
+//inverts display turns pixels that are on off, and off to on.
 void DmDisplay::invertDisplay(bool reverse)
 {
 	write(0xA6+(!reverse), INSTRUCT);
 }
-
+//sets column address, thus which column of bytes to address. (bytes represents pixels.)
 void DmDisplay::setCol(uint8_t col)
 {
 	int higher = col>>4;
@@ -117,36 +125,20 @@ void DmDisplay::setCol(uint8_t col)
 	write((0x10|higher), INSTRUCT);
 	write(lower, INSTRUCT);
 }
-
+//sets page address. thus which row of bytes to address. (bytes represents pixels.)
 void DmDisplay::setRow(uint8_t row)
 {
 	int page = (0xB0|row);
 	write(page, INSTRUCT);
-	
-	//I understand the first line
-	//its to get the page addres to set.
-	//but everything after it makes no sens to me,
-	//when I look at the data sheet.
-	
-	//uint8_t page = 0xB0 + (row);
-	
-	//write(page, INSTRUCT);
-	//write(0x10, INSTRUCT);
-	//write(0x00, INSTRUCT);
-	
-	//lcdChar("                    ");
-	
-	//write(page, INSTRUCT);
-	//write(0x10, INSTRUCT);
-	//write(0x00, INSTRUCT);
 }
 
+//toggles display on or off, depending on state.
 void DmDisplay::toggleDisplayOnOff(bool state)
 {
 	int new_state = (0xAE + state);
 	write(new_state, INSTRUCT);
 }
-
+//prints a char to screen, increments column addres by char width.
 void DmDisplay::lcdChar(const char *str)
 {
 	int charCount = strlen(str);
@@ -174,6 +166,8 @@ void DmDisplay::lcdChar(const char *str)
 	//reset column address
 	resetColumnAdress();
 }
+//fill screen with spaces.
+//so it seems cleared.
 void DmDisplay::clear()
 {
 	for(int i = 0;i<6;i++)
@@ -182,11 +176,13 @@ void DmDisplay::clear()
 		lcdChar("                    ");
 	}
 }
+//set write location for for example writing pixel data.
 void DmDisplay::setWriteAddress(uint8_t columnAddr, uint8_t page)
 {
 	setRow(page);
 	setCol(columnAddr);
 }
+//set cursor to location x,y with in bounds of the screen size.
 void DmDisplay::setCursor(uint8_t x, uint8_t y)
 {
 	// this function wil do nothing if you specify numbers
@@ -200,6 +196,12 @@ void DmDisplay::setCursor(uint8_t x, uint8_t y)
 		}	
 	}
 }
+//sets print location to 0.0
+void DmDisplay::home()
+{
+	setCursor(0,0);
+}
+//resets column addres aka sets to position 0,x
 void DmDisplay::resetColumnAdress()
 {
 	write(0x10, INSTRUCT);
