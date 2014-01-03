@@ -1,3 +1,31 @@
+/*
+ * author: Duality / Robert
+ * edited: 24-12-2013
+ * 
+ * functions for creating game of life.
+ * 
+ * */
+
+#include <stdlib.h>
+//number it takes to survive and to reproduce/become alife.
+#define surviveAbility 2
+#define reproductiveNumber 3
+//field.
+uint8_t field[fieldSize+1];
+//randomly create cells at position in field.
+void fillField(uint8_t *field, int position)
+{
+	uint16_t randomVal = rand()%2;
+	field[position] = (bool)randomVal;
+}
+
+//make a random playing field.
+void createRandomField(uint8_t *field)
+{
+	for(int i = 0;i<fieldSize;i++)
+		fillField(field, i);
+}
+
 //check if there is a cell above the current position in field.
 int checkUpper(uint8_t *field, int position){
   if(position-fieldWidth>0){
@@ -13,6 +41,7 @@ int checkUpper(uint8_t *field, int position){
   }
   return 0;
 }
+
 //check if there is a cell bellow the current position in field.
 int checkLower(uint8_t *field, int position){
   if(position+fieldWidth<fieldSize){
@@ -43,6 +72,7 @@ int checkLeft(uint8_t *field, int position){
   }
   return 0;
 }
+
 //check if there is a cell to the right of the current position in field.
 int checkRight(uint8_t *field, int position){
   if(position+1<fieldSize){
@@ -58,6 +88,7 @@ int checkRight(uint8_t *field, int position){
   }
   return 0;
 }
+
 //check if there is a cell to the upper left of the current position in field.
 int checkUpperLeft(uint8_t *field, int position){
   if(position-fieldWidth+1>0){
@@ -73,6 +104,7 @@ int checkUpperLeft(uint8_t *field, int position){
   }
   return 0;
 }
+
 //check if there is a cell to the upper right of the current position in field.
 int checkUpperRight(uint8_t *field, int position){
   if(position-fieldWidth-1>0){
@@ -103,6 +135,7 @@ int checkLowerLeft(uint8_t *field, int position){
   }
   return 0;
 }
+
 //check if there is a cell to the lower Right of the current position in field.
 int checkLowerRight(uint8_t *field, int position){
   if(position+fieldWidth+1<fieldSize){
@@ -118,6 +151,7 @@ int checkLowerRight(uint8_t *field, int position){
   }
   return 0;
 }
+
 //return how many lifing cels are around a position in field.
 int totalAround(uint8_t *field, int position){
   int around = checkUpper(field, position)+checkLower(field, position)+checkLeft(field, position)+checkRight(field, position)+checkUpperLeft(field, position)+checkUpperRight(field, position)+checkLowerLeft(field, position)+checkLowerRight(field, position);

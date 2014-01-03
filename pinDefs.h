@@ -1,5 +1,5 @@
-#ifndef PINDEFS_H
-#define PINDEFS_H
+#ifndef __PINDEFS_H__
+#define __PINDEFS_H__
 
 /*
  * using a atmega16
@@ -31,28 +31,26 @@
  * 
  * */
  
-#define A0 						_BV(PD6)
+#define A0 						_BV(PD6) //(1<<PD6)
 #define RW 						_BV(PD5)
 #define ENABLE 					_BV(PD4)
-#define LCD_POWER 				_BV(PD3)
 
-#define FUNCTIONPORT 			PORTD
+#define FUNCTIONPORT 			(PORTD)
 #define FUNCTIONDIR 			(DDRD)
-#define FUNCTIONPORT_TO_OUTPUT	(FUNCTIONDIR |=  (A0|RW|ENABLE|LCD_POWER))
-#define FUNCTIONPORT_TO_INPUT 	(FUNCTIONDIR &= ~(A0|RW|ENABLE|LCD_POWER))
+#define FUNCTIONPORT_TO_OUTPUT	(FUNCTIONDIR |=  (A0|RW|ENABLE))
+#define FUNCTIONPORT_TO_INPUT 	(FUNCTIONDIR &= ~(A0|RW|ENABLE))
 
 #define SET_A0 					(FUNCTIONPORT |= A0)
 #define SET_RW 					(FUNCTIONPORT |= RW)
-#define SET_ENABLE 				(FUNCTIONPORT |= ENABLE) 
-#define SET_POWER				(FUNCTIONPORT |= LCD_POWER)
+#define SET_ENABLE 				(FUNCTIONPORT |= ENABLE)
 
 #define CLEAR_A0				(FUNCTIONPORT &= ~(A0))
 #define CLEAR_RW				(FUNCTIONPORT &= ~(RW))
 #define CLEAR_ENABLE			(FUNCTIONPORT &= ~(ENABLE))
-#define CLEAR_POWER				(FUNCTIONPORT &= ~(LCD_POWER))
 
-#define DATA_PORT 				PORTC
+#define DATA_PORT 				(PORTC)
 #define DATA_DIR 				(DDRC)
+#define DATA_INPUT				(PINC)
 #define DATAPORT_TO_OUTPUT 		(DATA_DIR = 0xFF)
 #define DATAPORT_TO_INPUT		(DATA_DIR = 0x00)
 

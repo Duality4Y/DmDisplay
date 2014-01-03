@@ -1,5 +1,5 @@
-#ifndef DMDISPLAY_H
-#define DMDISPLAY_H
+#ifndef __DMDISPLAY_H__
+#define __DMDISPLAY_H__
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -47,6 +47,6 @@ class DmDisplay
 		};
 };
 
-#include "DmDisplay.cpp"
+//#include "DmDisplay.cpp"
 
 #endif
