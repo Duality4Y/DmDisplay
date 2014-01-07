@@ -1,9 +1,15 @@
-#ifndef __FONT5X7_H__
-#define __FONT5X7_H__
+#ifndef FONT5X7_H
+#define FONT5X7_H
+#include <avr/pgmspace.h>
+
+#ifdef PROGMEM 
+	#undef PROGMEM 
+	#define PROGMEM __attribute__((section(".progmem.data"))) 
+#endif
 
 // 5x7 Font
-char Font[][5] = {
-{ 0x00 , 0x00 , 0x00 , 0x00 , 0x00 }, 		
+const unsigned char Font[96][5] PROGMEM = {
+{ 0x00 , 0x00 , 0x00 , 0x00 , 0x00 }, 
 { 0x00 , 0x00 , 0x5F , 0x00 , 0x00 }, 
 { 0x00 , 0x07 , 0x00 , 0x07 , 0x00 }, 
 { 0x14 , 0x7F , 0x14 , 0x7F , 0x14 }, 

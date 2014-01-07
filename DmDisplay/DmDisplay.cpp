@@ -35,13 +35,13 @@ void DmDisplay::init(void)
 //if INSTRUCT it's instruction data.
 void DmDisplay::write(uint8_t data, uint8_t type)
 {
-	DATA_PORT &= 0x00;
+	DATA_PORT_CLEAR;
 	if(type == DATA)
 	{
 		CLEAR_RW;
 		SET_A0;
 		
-		DATA_PORT = data;
+		DATA_PORT(data);
 		
 		SET_ENABLE;
 		_delay_us(10);
@@ -54,7 +54,7 @@ void DmDisplay::write(uint8_t data, uint8_t type)
 		CLEAR_RW;
 		CLEAR_A0;
 		
-		DATA_PORT = data;
+		DATA_PORT(data);
 		
 		SET_ENABLE;
 		_delay_us(10);
@@ -158,7 +158,7 @@ void DmDisplay::lcdChar(const char *str)
 		uint8_t lcd_char = currentChar-32;
 		for(uint8_t byte = 0;byte<5;byte++)
 		{
-			write(Font[lcd_char][byte], DATA);
+			write(pgm_read_byte(&(Font[lcd_char][byte])), DATA);
 		}
 	}
 	//end of read-modify-write
@@ -207,7 +207,7 @@ void DmDisplay::setCursor(uint8_t x, uint8_t y)
 		{
 			//font width is 5
 			setWriteReadAddres(x*5, y);
-		}	
+		}
 	}
 }
 //sets print location to 0.0

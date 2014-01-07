@@ -1,5 +1,5 @@
-#ifndef __PINDEFS_H__
-#define __PINDEFS_H__
+#ifndef PINDEFS_H
+#define PINDEFS_H
 
 /*
  * using a atmega16
@@ -48,7 +48,8 @@
 #define CLEAR_RW				(FUNCTIONPORT &= ~(RW))
 #define CLEAR_ENABLE			(FUNCTIONPORT &= ~(ENABLE))
 
-#define DATA_PORT 				(PORTC)
+#define DATA_PORT_CLEAR			(PORTC &= 0x00)
+#define DATA_PORT(x)			(PORTC = x)
 #define DATA_DIR 				(DDRC)
 #define DATA_INPUT				(PINC)
 #define DATAPORT_TO_OUTPUT 		(DATA_DIR = 0xFF)
