@@ -34,7 +34,7 @@ class DmDisplay
 		void home(void);
 		void clearMarkers(void);
 		void toggleEnable(void);
-		void writePixel(uint8_t, uint8_t);
+		void writePixel(uint8_t, uint8_t, uint8_t);
 		uint8_t read();
 		void drawArc(float, float, int, float, float);
 		void drawCircle(uint8_t, uint8_t, uint8_t);
