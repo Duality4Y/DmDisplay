@@ -158,7 +158,7 @@ void DmDisplay::lcdChar(const char *str)
 		uint8_t lcd_char = currentChar-32;
 		for(uint8_t byte = 0;byte<5;byte++)
 		{
-			write(pgm_read_byte(&(Font[lcd_char][byte])), DATA);
+			write( pgm_read_byte( &(Font[lcd_char][byte])), DATA);
 		}
 	}
 	//end of read-modify-write
@@ -283,6 +283,44 @@ void DmDisplay::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
     	}
 	}
 }
+
+//implementation of line drawing with color.
+void DmDisplay::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t color)
+{
+	int deltax, deltay, x,y, steep;
+	int error, ystep;
+	
+	steep = abs(y1, y2) > abs(x1 ,x2);  
+
+	if (steep)
+	{
+		swap(x1, y1);
+		swap(x2, y2);
+	}
+
+	if (x1 > x2)
+	{
+		swap(x1, x2);
+		swap(y1, y2);
+	}
+
+	deltax = x2 - x1;
+	deltay = abs(y2, y1);  
+	error = deltax / 2;
+	y = y1;
+	if(y1 < y2) ystep = 1;  else ystep = -1;
+
+	for(x = x1; x <= x2; x++)
+	{
+		if (steep) writePixel(y,x,color); else writePixel(x,y,color);
+   		error = error - deltay;
+		if (error < 0)
+		{
+			y = y + ystep;
+			error = error + deltax;
+    	}
+	}
+}
 //drawing a rectangle
 void DmDisplay::drawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height)
 {
@@ -330,7 +368,44 @@ void DmDisplay::drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
 		writePixel(x0 - y, y0 - x, 1);
 	}
 }
-//this thing fails big time.
+//this function implements a circle with a color. draw visible or invisible circles .. 
+void DmDisplay::drawCircle(uint8_t x0, uint8_t y0, uint8_t radius, uint8_t color)
+{
+	int error = 1 - radius;
+	int errorY = 1;
+	int errorX = -2 * radius;
+	int x = radius, y = 0;
+	
+	writePixel(x0, y0 + radius, color);
+	writePixel(x0, y0 - radius, color);
+	writePixel(x0 + radius, y0, color);
+	writePixel(x0 - radius, y0, color);
+	
+	while(y< x)
+	{
+		if(error > 0)
+		{
+			x--;
+			errorX += 2;
+			error += errorX;
+		}
+		y++;
+		errorY += 2;
+		error += errorY;
+		
+		writePixel(x0 + x, y0 + y, color);
+		writePixel(x0 - x, y0 + y, color);
+		writePixel(x0 + x, y0 - y, color);
+		writePixel(x0 - x, y0 - y, color);
+		writePixel(x0 + y, y0 + x, color);
+		writePixel(x0 - y, y0 + x, color);
+		writePixel(x0 + y, y0 - x, color);
+		writePixel(x0 - y, y0 - x, color);
+	}
+}
+
+
+//this thing fails big time. floating point computation on a 8 bit device ... so ugly.
 void DmDisplay::drawArc(float x, float y, int r, float start_angle, float end_angle)
 {
 	// I know the question is tagged c++, but the idea comes clear in javascript
@@ -346,7 +421,7 @@ void DmDisplay::drawArc(float x, float y, int r, float start_angle, float end_an
 		drawLine(x0, y0, x1, y1);
 	}
 }
-
+//clears al the markers.
 void DmDisplay::clearMarkers(void)
 {
 	for(int i = 0;i<7;i++)

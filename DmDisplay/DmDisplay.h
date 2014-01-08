@@ -14,6 +14,13 @@
 class DmDisplay
 {
 	public:
+		//constants.
+		static const uint8_t WIDTH = 100;
+		static const uint8_t HEIGTH = 48; //width and height in pixels.
+		static const uint8_t MAXCONTRAST = 32; //maximum contrast value.
+		static const uint8_t BLACK = 1;
+		static const uint8_t WHITE = 0;
+		//function prototypes.
 		DmDisplay(void);
 		void init(void);
 		void blinkControlLines(void);
@@ -34,12 +41,15 @@ class DmDisplay
 		void home(void);
 		void clearMarkers(void);
 		void toggleEnable(void);
-		void writePixel(uint8_t, uint8_t, uint8_t);
 		uint8_t read();
+		//graphical functions.
+		void writePixel(uint8_t, uint8_t, uint8_t);
 		void drawArc(float, float, int, float, float);
 		void drawCircle(uint8_t, uint8_t, uint8_t);
-		void drawRect(uint8_t, uint8_t, uint8_t, uint8_t);
+		void drawCircle(uint8_t, uint8_t, uint8_t, uint8_t);
 		void drawLine(uint8_t, uint8_t, uint8_t, uint8_t);
+		void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
+		void drawRect(uint8_t, uint8_t, uint8_t, uint8_t);
 		
 		
 		enum
