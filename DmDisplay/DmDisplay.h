@@ -30,7 +30,8 @@ class DmDisplay
 		void setMarker(uint8_t, bool);
 		void invertDisplay(bool);
 		void setRow(uint8_t);
-		void lcdChar(const char *);
+		void putChar(char);
+		void putStr(const char *);
 		void resetColumnAdress(void);
 		void resetRowAdress(void);
 		void setCol(uint8_t col);
@@ -50,6 +51,7 @@ class DmDisplay
 		void drawLine(uint8_t, uint8_t, uint8_t, uint8_t);
 		void drawLine(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
 		void drawRect(uint8_t, uint8_t, uint8_t, uint8_t);
+		void drawRect(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
 		
 		
 		enum

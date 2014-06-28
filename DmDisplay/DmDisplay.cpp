@@ -33,6 +33,10 @@ void DmDisplay::init(void)
 //type = wheter it's instruction/command or data.
 //if DATA it's pixel data.
 //if INSTRUCT it's instruction data.
+void DmDisplay::write(uint8_t data)
+{
+	write(data, DATA);
+}
 void DmDisplay::write(uint8_t data, uint8_t type)
 {
 	DATA_PORT_CLEAR;
@@ -134,14 +138,18 @@ void DmDisplay::toggleDisplayOnOff(bool state)
 	int new_state = (0xAE + state);
 	write(new_state, INSTRUCT);
 }
+//a function for putting a single character on display.
+void DmDisplay::putChar(char lcd_char)
+{
+	for(uint8_t byte = 0;byte<5;byte++)
+	{
+		write( pgm_read_byte( &(Font[lcd_char][byte])), DATA);
+	}
+};
 //prints a char to screen, increments column addres by char width.
-void DmDisplay::lcdChar(const char *str)
+void DmDisplay::putStr(const char *str)
 {
 	int charCount = strlen(str);
-	
-	//int charCount = 0;
-	//while(str[charCount] != '\0') charCount++;
-	
 	//if there are more chars then 
 	//there is room on a line. just make it line size.
 	if(charCount > 20)
@@ -156,10 +164,7 @@ void DmDisplay::lcdChar(const char *str)
 	{
 		uint8_t currentChar = str[i];
 		uint8_t lcd_char = currentChar-32;
-		for(uint8_t byte = 0;byte<5;byte++)
-		{
-			write( pgm_read_byte( &(Font[lcd_char][byte])), DATA);
-		}
+		putChar(lcd_char);
 	}
 	//end of read-modify-write
 	write(0xEE, INSTRUCT);
@@ -174,7 +179,7 @@ void DmDisplay::clear(void)
 	for(int i = 0;i<6;i++)
 	{
 		setRow(i);
-		lcdChar("                    ");
+		putStr("                    ");
 	}
 }
 //set write location for example writing pixel data.
@@ -332,6 +337,18 @@ void DmDisplay::drawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height)
 	drawLine(x,y, x, y+height);
 	//right y line.
 	drawLine(x+width,y, x+width, y+height);
+}
+//draw a rectangle with color
+void DmDisplay::drawRect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color)
+{
+	//upper x line.
+	drawLine(x,y, x+width, y, color);
+	//lower x line.
+	drawLine(x, y+height, x+width, y+height, color);
+	//left y line.
+	drawLine(x,y, x, y+height, color);
+	//right y line.
+	drawLine(x+width,y, x+width, y+height, color);
 }
 //implementation of bresenham's circle
 void DmDisplay::drawCircle(uint8_t x0, uint8_t y0, uint8_t radius)
